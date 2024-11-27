@@ -35,4 +35,3 @@ def angle_sens():
 
 while True:
     dist_sens()
-    print("jeWISH")
