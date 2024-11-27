@@ -6,7 +6,7 @@ robot = Robot()
 power = 1
 
 pBoard = robot.power_board
-mBoard = robot.motor_board
+mBoard = robot.motor_boards["SR0UCD"] # back wheels
 
 pBoard.outputs.power_on() # turn on pBoard
 pBoard.outputs[OUT_H0].is_enabled = True
