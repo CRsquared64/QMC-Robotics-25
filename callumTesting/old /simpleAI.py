@@ -2,6 +2,7 @@ from sr.robot3 import *
 import time
 import math
 import movment
+
 power = 0.6 # power of motors
 
 robot = Robot() # get robot object
@@ -35,7 +36,7 @@ def update_values(robot, current_marker):
 
 def drive_to_marker(robot, marker, power, backmBoard, frontmBoard):
     turned = False
-    turn_power = 0.7
+    turn_power = 0.9
     distance, angle = update_values(robot, marker)
     print(f"Distance {distance}, Angle {angle}, Power {power}")
     direction = angle_check(angle)

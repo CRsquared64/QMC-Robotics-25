@@ -31,7 +31,21 @@ def angle_sens():
     markers = robot.camera.see()
     for marker in markers:
         angle =math.degrees(marker.position.horizontal_angle)
+    if angle < -15:
+        led.leds[LED_A].colour = Colour.BLUE
+        led.leds[LED_B].colour = Colour.OFF
+        led.leds[LED_C].colour = Colour.OFF
+    elif angle > 15:
+        led.leds[LED_C].colour = Colour.BLUE
+        led.leds[LED_B].colour = Colour.OFF
+        led.leds[LED_A].colour = Colour.OFF
+    else:
+        led.leds[LED_B].colour = Colour.RED
+        led.leds[LED_C].colour = Colour.OFF
+        led.leds[LED_A].colour = Colour.OFF
+
+
 
 
 while True:
-    dist_sens()
+    angle_sens()
