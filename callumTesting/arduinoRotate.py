@@ -3,7 +3,7 @@ import time
 import math
 import movment
 import numpy as np
-from statistics import mode
+
 
 import math
 
@@ -44,14 +44,42 @@ def average_angle(arduino):
     return mean_angle
 
 
+def turn_amount(current, target):
+    difference = (target - current) % 360  # Get the difference in the range [0, 360)
+    if difference > 180:  # Take the shorter negative route if > 180
+        difference -= 360
 
+    direction = 1 if difference > 0 else -1  # 1 for right -1 for left
+    return abs(difference), direction
 def ArduinoDrive(robot, marker, power, backmBoard, frontmBoard, arduino):
-    distance, angle = update_values(robot, current_marker)
+    distance, angle = update_values(robot, marker)
     direction = angle_check(angle)
     arduino_angle = average_angle(arduino)
     print(f"Actual Angle: {angle}, Arduino Angle: {arduino_angle}")
     updated_heading = update_heading(arduino_angle, angle, direction)
-    while True:
+    while distance > 20:
+        arduino_angle = average_angle(arduino)
+        difference, direction = turn_amount(arduino_angle, updated_heading)
+        print(f"Target Heading {updated_heading}, Arduinos Heading {average_angle(arduino)}")
+        print(f"Difference: {difference}, Distance{distance}")
+        if difference > 2:
+            if direction == 1:
+                movment.right(backmBoard, 0.3)
+            else:
+                movment.left(backmBoard, 0.3)
+        else:
+            movment.stop_motors(backmBoard)
+
+        if distance > 20:
+            movment.forward(frontmBoard, 0.5)
+        else:
+            movment.stop_front(frontmBoard)
+        temp_distance, _ = update_values(robot, marker)
+        if temp_distance != 0:
+            distance = temp_distance
+        time.sleep(0.01)
+
+        """
         print(f"Target Heading {updated_heading}, Arduinos Heading {average_angle(arduino)}")
         if updated_heading > average_angle(arduino):
             movment.right(backmBoard, 0.3)
@@ -61,6 +89,10 @@ def ArduinoDrive(robot, marker, power, backmBoard, frontmBoard, arduino):
             print("left")
         if updated_heading - 10 < average_angle(arduino) < updated_heading + 10:
             movment.stop_motors(backmBoard)
+        """
+
+
+
 
 
 
