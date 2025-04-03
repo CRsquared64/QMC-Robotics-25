@@ -1,4 +1,5 @@
 import math
+import time
 class Guidance:
     def __init__(self, robot):
         self.robot = robot
@@ -73,3 +74,22 @@ class Guidance:
                     if marker.id == target.id: # if we find it return True
                         return True
         return False # else return False
+
+    def update_values(self,robot, current_marker):
+        markers = robot.camera.see()
+        for marker in markers:
+            if marker.id == current_marker.id:
+                return marker.position.distance, math.degrees(marker.position.horizontal_angle)
+        return 0, 0
+
+    def get_arduino_distance(self, arduino):
+        distance = 0
+        steps = 3
+        for i in range(steps):
+            time.sleep(0.1)
+            dist = (arduino.command("s"))
+            print(f"[ARDUINO] : {dist}")
+            if dist != "False":
+                distance += int(dist)
+        distance /= steps
+        return distance
