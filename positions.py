@@ -38,4 +38,3 @@ def zone_parse(zone: int) -> list[int]:
             zone_pallets = zone1_pallets
     return zone_bound, high_rise, zone_pallets
 
-print(zone3 + zone4)
